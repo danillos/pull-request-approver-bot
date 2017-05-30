@@ -32,7 +32,11 @@ defmodule GithubApprover.UseCases.UpdatePullRequest do
     total_changes_requested = count_value_in_list(states, "CHANGES_REQUESTED")
     total_pending = length(Github.requested_reviewers_for_issue(issue))
 
-    if total_approved < @required_approves && total_pending >= 0 && total_changes_requested == 0 do
+    IO.inspect total_approved
+    IO.inspect total_changes_requested
+    IO.inspect total_pending
+
+    if total_pending > 0 && total_changes_requested == 0 do
       add_label(issue, "needs review")
       remove_label(issue, "changes requested")
       remove_label(issue, "approved")
