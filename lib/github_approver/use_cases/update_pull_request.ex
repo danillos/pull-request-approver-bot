@@ -37,8 +37,8 @@ defmodule GithubApprover.UseCases.UpdatePullRequest do
     IO.inspect "requested: #{total_pending}"
 
     if total_pending > 0 && total_changes_requested == 0 do
-      add_label(issue, "needs review")
-      remove_label(issue, "changes requested")
+      add_label(issue, "needs_review")
+      remove_label(issue, "changes_requested")
       remove_label(issue, "approved")
     end
 
