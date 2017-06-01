@@ -24,6 +24,12 @@ use Mix.Config
 config :github_approver, required_approves: 2
 config :github_approver, github_access_token: System.get_env("GITHUB_ACCESS_TOKEN")
 
+config :github_approver, labels: %{
+	"in_progress"       => "in progress",
+	"needs_review"      => "needs review",
+	"changes_requested" => "changes requested",
+	"approved"          => "approved",
+}
 
 # params["organization"]["login"]
 # It is also possible to import configuration files, relative to this

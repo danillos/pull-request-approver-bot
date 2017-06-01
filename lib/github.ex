@@ -25,12 +25,13 @@ defmodule Github do
   end
 
   def reviews_for_issue(issue) do
-    results = get("/repos/#{issue["project"]}/pulls/#{issue["id"]}/reviews").body
-    result = results
+    get("/repos/#{issue["project"]}/pulls/#{issue["id"]}/reviews").body
+  end
+
+  def last_reviews_by_user_for_issue(issue) do
+    reviews_for_issue(issue)
     |> Enum.group_by(fn(i) -> i["user"]["login"] end)
     |> Enum.map(fn {_k, v} -> Enum.sort_by(v, fn(d) -> Timex.parse(d, "{ISO:Extended}") end) |>  List.last  end)
-
-    result
   end
 
   def requested_reviewers_for_issue(issue) do
