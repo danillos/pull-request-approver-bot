@@ -26,7 +26,7 @@ config :github_approver, github_access_token: System.get_env("GITHUB_ACCESS_TOKE
 
 config :github_approver, labels: %{
 	"in_progress"       => "in progress",
-	"needs_review"      => "needs review",
+	"pending"           => "needs review",
 	"changes_requested" => "changes requested",
 	"approved"          => "approved",
 }

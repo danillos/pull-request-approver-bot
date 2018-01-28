@@ -15,13 +15,21 @@ defmodule Github do
     get("/repos/#{issue["project"]}/issues/#{issue["id"]}/labels").body
   end
 
+  def label_exist?(issue, label) do
+    Enum.member?(label_names(issue), label)
+  end
+
   def add_label_to_issue(issue, label) do
-    post("/repos/#{issue["project"]}/issues/#{issue["id"]}/labels", [label])
+    if !Github.label_exist?(issue, label) do
+      post("/repos/#{issue["project"]}/issues/#{issue["id"]}/labels", [label])
+    end
   end
 
   def remove_label_from_issue(issue, label) do
-    label = URI.encode(label)
-    delete("/repos/#{issue["project"]}/issues/#{issue["id"]}/labels/#{label}")
+    if Github.label_exist?(issue, label) do
+      label = URI.encode(label)
+      delete("/repos/#{issue["project"]}/issues/#{issue["id"]}/labels/#{label}")
+    end
   end
 
   def reviews_for_issue(issue) do
@@ -40,5 +48,10 @@ defmodule Github do
 
   def access_token do
   	Application.get_env(:github_approver, :github_access_token)
+  end
+
+  defp label_names(issue) do
+    labels_for_issue(issue)
+    |> Enum.map(fn(x) -> x["name"] end)
   end
 end
