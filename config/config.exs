@@ -21,7 +21,6 @@ use Mix.Config
 #     config :logger, level: :info
 #
 
-config :github_approver, required_approves: 2
 config :github_approver, github_access_token: System.get_env("GITHUB_ACCESS_TOKEN")
 
 config :github_approver, labels: %{

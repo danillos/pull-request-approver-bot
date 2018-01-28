@@ -1,8 +1,8 @@
 defmodule GithubApprover.Services.UpdateIssueLabels do
   @app_labels Application.get_env(:github_approver, :labels)
 
-  def call(issue) do
-  	review_status = GithubApprover.Services.ReviewStatus.call(issue)
+  def call(issue, min_required_reviews) do
+  	review_status = GithubApprover.Services.ReviewStatus.call(issue, min_required_reviews)
 
   	case review_status do
        "pending"           -> change_to_pending(issue)

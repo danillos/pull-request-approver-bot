@@ -1,8 +1,7 @@
 defmodule GithubApprover.Services.ReviewStatus do
   @app_labels Application.get_env(:github_approver, :labels)
-  @required_approves Application.get_env(:github_approver, :required_approves)
 
-  def call(issue) do
+  def call(issue, min_required_reviews) do
     reviews = current_reviews(issue)
 
     total_approved          = count_value_in_list(reviews, "APPROVED")
@@ -14,12 +13,12 @@ defmodule GithubApprover.Services.ReviewStatus do
     IO.inspect "requested: #{total_pending}"
 
     cond do
-      in_progress?(issue)                  -> "in_progress"
-      total_changes_requested > 0          -> "changes_requested"
-      total_pending > 0                    -> "pending"
-      total_approved >= @required_approves -> "approved"
-      total_approved != 0                  -> "pending"
-      true                                 -> nil
+      in_progress?(issue)                    -> "in_progress"
+      total_changes_requested > 0            -> "changes_requested"
+      total_pending > 0                      -> "pending"
+      total_approved >= min_required_reviews -> "approved"
+      total_approved != 0                    -> "pending"
+      true                                   -> nil
     end
   end
 
