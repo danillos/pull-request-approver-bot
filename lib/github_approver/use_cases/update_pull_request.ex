@@ -6,9 +6,10 @@ defmodule GithubApprover.UseCases.UpdatePullRequest do
     issue = GithubApprover.Entities.Issue.create(pull_request["issue_url"])
 
     case params do
-       %{"action" => "review_requested"       } -> GithubApprover.Services.UpdateIssueLabels.call(issue)
+       %{"action" => "review_requested"}        -> GithubApprover.Services.UpdateIssueLabels.call(issue)
+       %{"action" => "dismissed" }              -> GithubApprover.Services.UpdateIssueLabels.call(issue)
        %{"action" => "review_request_removed" } -> GithubApprover.Services.UpdateIssueLabels.call(issue)
-       %{"action" => _, "review" => _         } -> GithubApprover.Services.UpdateIssueLabels.call(issue)
+       %{"action" => _, "review" => _}          -> GithubApprover.Services.UpdateIssueLabels.call(issue)
        _                                        -> IO.write "Event not implemented #{params["action"]}"
     end
   end
