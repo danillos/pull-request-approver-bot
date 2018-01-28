@@ -18,6 +18,7 @@ defmodule GithubApprover.Services.ReviewStatus do
       total_changes_requested > 0          -> "changes_requested"
       total_pending > 0                    -> "pending"
       total_approved >= @required_approves -> "approved"
+      total_approved != 0                  -> "pending"
       true                                 -> nil
     end
   end
