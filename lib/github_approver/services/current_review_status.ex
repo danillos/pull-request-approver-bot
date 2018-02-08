@@ -1,9 +1,7 @@
 defmodule GithubApprover.Services.CurrentReviewStatus do
   @app_labels Application.get_env(:github_approver, :labels)
 
-  def call(issue, min_required_reviews) do
-    review_status = GithubApprover.Services.ReviewStatus.call(issue)
-
+  def call(issue, min_required_reviews, review_status) do
     IO.inspect review_status
 
     cond do
