@@ -28,6 +28,7 @@ config :github_approver, labels: %{
 	"pending"           => "needs review",
 	"changes_requested" => "changes requested",
 	"approved"          => "approved",
+	"check_comments"    => "check comments",
 }
 
 # params["organization"]["login"]

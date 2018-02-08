@@ -36,8 +36,19 @@ defmodule Github do
     get("/repos/#{issue["project"]}/pulls/#{issue["id"]}/reviews").body
   end
 
+  def has_review_comments?(issue) do
+    total = last_reviews_by_user_for_issue(issue)
+    |> Enum.filter(fn(x) -> (x["state"] == "COMMENTED") end)
+    |> Enum.count
+
+    IO.inspect total
+    
+    total > 0
+  end
+
   def last_reviews_by_user_for_issue(issue) do
     reviews_for_issue(issue)
+    |> Enum.filter(fn(x)   -> (x["state"] == "COMMENTED" && x["body"] != "") || x["state"] != "COMMENTED"  end)
     |> Enum.group_by(fn(i) -> i["user"]["login"] end)
     |> Enum.map(fn {_k, v} -> Enum.sort_by(v, fn(d) -> Timex.parse(d, "{ISO:Extended}") end) |>  List.last  end)
   end

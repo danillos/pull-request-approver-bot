@@ -1,28 +1,17 @@
 defmodule GithubApprover.Services.ReviewStatus do
-  @app_labels Application.get_env(:github_approver, :labels)
 
-  def call(issue, min_required_reviews) do
-    reviews = current_reviews(issue)
+  def call(issue) do
+    reviews = reviews(issue)
 
-    total_approved          = count_value_in_list(reviews, "APPROVED")
-    total_changes_requested = count_value_in_list(reviews, "CHANGES_REQUESTED")
-    total_pending           = count_value_in_list(reviews, "PENDING")
-
-    IO.inspect "approved: #{total_approved}"
-    IO.inspect "changes: #{total_changes_requested}"
-    IO.inspect "requested: #{total_pending}"
-
-    cond do
-      in_progress?(issue)                    -> "in_progress"
-      total_changes_requested > 0            -> "changes_requested"
-      total_pending > 0                      -> "pending"
-      total_approved >= min_required_reviews -> "approved"
-      total_approved != 0                    -> "pending"
-      true                                   -> nil
-    end
+    %{
+      :approveds          => count_value_in_list(reviews, "APPROVED"), 
+      :changes_requesteds => count_value_in_list(reviews, "CHANGES_REQUESTED"),
+      :pendings           => count_value_in_list(reviews, "PENDING"),
+      :comments           => count_value_in_list(reviews, "COMMENTED")
+    }
   end
 
-  defp current_reviews(issue) do
+  defp reviews(issue) do
     requested_reviewers = Github.requested_reviewers_for_issue(issue)["users"]
     |> Enum.map(fn(r) -> r["login"] end)
 
@@ -33,10 +22,6 @@ defmodule GithubApprover.Services.ReviewStatus do
     requested_reviewers
     |> Enum.map(fn(_r) -> "PENDING" end)
     |> Enum.concat(last_reviews)
-  end
-
-  defp in_progress?(issue) do
-    Github.label_exist?(issue, @app_labels["in_progress"])
   end
 
   defp count_value_in_list(list, value) do
