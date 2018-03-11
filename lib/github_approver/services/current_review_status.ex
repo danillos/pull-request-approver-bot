@@ -2,8 +2,6 @@ defmodule GithubApprover.Services.CurrentReviewStatus do
   @app_labels Application.get_env(:github_approver, :labels)
 
   def call(issue, min_required_reviews, review_status) do
-    IO.inspect review_status
-
     cond do
       in_progress?(issue)                               -> "in_progress"
       review_status[:changes_requesteds] > 0            -> "changes_requested"

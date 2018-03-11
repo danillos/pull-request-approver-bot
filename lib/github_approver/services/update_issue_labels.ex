@@ -3,10 +3,10 @@ defmodule GithubApprover.Services.UpdateIssueLabels do
 
   def call(issue, min_required_reviews) do
     review_status = GithubApprover.Services.ReviewStatus.call(issue)
-
   	current_review_status = GithubApprover.Services.CurrentReviewStatus.call(issue, min_required_reviews, review_status)
 
   	case current_review_status do
+       "in_progress"       -> change_to_in_progress(issue)
        "pending"           -> change_to_pending(issue)
        "changes_requested" -> change_to_changes_requested(issue)
        "approved"          -> change_to_approved(issue)
@@ -22,6 +22,12 @@ defmodule GithubApprover.Services.UpdateIssueLabels do
     else
       Github.remove_label_from_issue(issue, @app_labels["check_comments"])
     end
+  end
+
+  def change_to_in_progress(issue) do
+    Github.remove_label_from_issue(issue, @app_labels["changes_requested"])
+    Github.remove_label_from_issue(issue, @app_labels["approved"])
+    Github.remove_label_from_issue(issue, @app_labels["pending"])
   end
 
   defp change_to_pending(issue) do

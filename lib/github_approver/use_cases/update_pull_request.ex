@@ -1,7 +1,7 @@
 defmodule GithubApprover.UseCases.UpdatePullRequest do
 
   def call(%{ "pull_request" => pull_request, "min_required_reviews" => min_required_reviews } = params) do
-    :timer.sleep(400)
+    :timer.sleep(300)
 
     min_required_reviews = String.to_integer(min_required_reviews)
     issue = GithubApprover.Entities.Issue.create(pull_request["issue_url"])
