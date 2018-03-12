@@ -50,6 +50,7 @@ defmodule Github do
     total > 0
   end
 
+  # TODO: Move to another location
   def last_reviews_by_user_for_issue(issue) do
     reviews_for_issue(issue)
     |> Enum.filter(fn(review) -> valid_review?(review, issue) end)
