@@ -23,6 +23,9 @@ use Mix.Config
 
 config :github_approver, github_access_token: System.get_env("GITHUB_ACCESS_TOKEN")
 
+config :github_approver, trigger_delay: 500
+config :github_approver, min_required_reviews: 2
+
 config :github_approver, labels: %{
 	"in_progress"       => "in progress",
 	"pending"           => "needs review",
