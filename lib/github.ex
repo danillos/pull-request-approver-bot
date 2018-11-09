@@ -66,26 +66,26 @@ defmodule Github do
   	Application.get_env(:github_approver, :github_access_token)
   end
 
-  defp last_review(reviews) do
-    Enum.sort_by(reviews, fn(review) -> Timex.parse(review["submitted_at"], "{ISO:Extended}") end) |>  List.last
+  def last_review(reviews) do
+    Enum.sort_by(reviews, fn(review) -> elem(DateTime.from_iso8601(review["submitted_at"]), 1) |> DateTime.to_unix() end) |>  List.last
   end
 
-  defp valid_review?(review, issue) do
+  def valid_review?(review, issue) do
     regular_review?(review) || valid_review_comment?(review, issue)
   end
 
-  defp valid_review_comment?(review, issue) do
+  def valid_review_comment?(review, issue) do
     empty_body = review["body"] == ""
     owner_comment = review["user"]["login"] == issue["user"]["login"]
 
     !regular_review?(review) && !empty_body && !owner_comment
   end
 
-  defp regular_review?(review) do
+  def regular_review?(review) do
     review["state"] != "COMMENTED"
   end
 
-  defp label_names(issue) do
+  def label_names(issue) do
     labels_for_issue(issue)
     |> Enum.map(fn(x) -> x["name"] end)
   end
