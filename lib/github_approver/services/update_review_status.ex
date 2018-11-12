@@ -1,4 +1,4 @@
-defmodule GithubApprover.Services.UpdateIssueLabels do
+defmodule GithubApprover.Services.UpdateReviewStatus do
   @app_labels Application.get_env(:github_approver, :labels)
 
   def call(issue, min_required_reviews) do
@@ -10,7 +10,7 @@ defmodule GithubApprover.Services.UpdateIssueLabels do
        "pending"           -> change_to_pending(issue)
        "changes_requested" -> change_to_changes_requested(issue)
        "approved"          -> change_to_approved(issue)
-       _ = status          -> change_to_pending(issue)
+       _                   -> change_to_pending(issue)
     end
 
     update_check_comments_label(issue, review_status)

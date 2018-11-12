@@ -8,7 +8,8 @@ defmodule GithubApprover.Entities.Issue do
     }
 
     issue_info = Github.issue_info(issue)
-    
-    Map.put(issue, "user", issue_info["user"])
+    issue = Map.put(issue, "user", issue_info["user"])
+    issue = Map.put(issue, "title", issue_info["title"])
+    Map.put(issue, "body", issue_info["body"])
   end
 end

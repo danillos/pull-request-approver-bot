@@ -1,17 +1,20 @@
 defmodule GithubApprover.UseCases.UpdatePullRequest do
   
   def call(%{ "pull_request" => pull_request } = params) do
-    :timer.sleep(params["trigger_delay"] || Application.get_env(:github_approver, :trigger_delay))
+    trigger_delay = params["trigger_delay"] || Application.get_env(:github_approver, :trigger_delay)
+    :timer.sleep(trigger_delay)
 
     min_required_reviews = min_required_reviews(params)
 
     issue = GithubApprover.Entities.Issue.create(pull_request["issue_url"])
 
     case params do
-       %{"action" => "review_requested"}        -> GithubApprover.Services.UpdateIssueLabels.call(issue, min_required_reviews)
-       %{"action" => "dismissed" }              -> GithubApprover.Services.UpdateIssueLabels.call(issue, min_required_reviews)
-       %{"action" => "review_request_removed" } -> GithubApprover.Services.UpdateIssueLabels.call(issue, min_required_reviews)
-       %{"action" => _, "review" => _}          -> GithubApprover.Services.UpdateIssueLabels.call(issue, min_required_reviews)
+       %{ "action" => "opened"                 } -> GithubApprover.Services.AutoAddLabels.call(issue)
+       %{ "action" => "edited"                 } -> GithubApprover.Services.AutoAddLabels.call(issue)
+       %{ "action" => "review_requested"       } -> GithubApprover.Services.UpdateReviewStatus.call(issue, min_required_reviews)
+       %{ "action" => "dismissed"              } -> GithubApprover.Services.UpdateReviewStatus.call(issue, min_required_reviews)
+       %{ "action" => "review_request_removed" } -> GithubApprover.Services.UpdateReviewStatus.call(issue, min_required_reviews)
+       %{ "action" => _, "review" => _         } -> GithubApprover.Services.UpdateReviewStatus.call(issue, min_required_reviews)
        _                                        -> IO.write "Event not implemented #{params["action"]}"
     end
   end
