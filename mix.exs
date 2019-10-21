@@ -22,13 +22,13 @@ defmodule GithubApprover.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:cowboy, "~> 1.1"},
-      {:plug, "~> 1.3"},
+      {:plug_cowboy, "~> 1.0"},
+      {:plug, "~> 1.8"},
       {:poison, "~> 3.0"},
       {:mock, "~> 0.2", only: :test},
-      {:tesla, "~> 0.7"},
-      {:hackney, "~> 1.6"},
-      {:timex, "~> 3.0"},
+      {:tesla, "~> 0.10"},
+      {:hackney, "~> 1.15"},
+      {:timex, "~> 3.6"},
     ]
   end
 end

@@ -7,9 +7,13 @@ defmodule GithubApprover.Entities.Issue do
       "id"      => id
     }
 
-    issue_info = Github.issue_info(issue)
-    issue = Map.put(issue, "user", issue_info["user"])
-    issue = Map.put(issue, "title", issue_info["title"])
-    Map.put(issue, "body", issue_info["body"])
+    pull_request = Github.pull_request(issue)
+
+    issue = Map.put(issue, "user", pull_request["user"])
+    issue = Map.put(issue, "title", pull_request["title"])
+    issue = Map.put(issue, "is_draft", pull_request["draft"])
+    issue = Map.put(issue, "body", pull_request["body"])
+
+    issue
   end
 end

@@ -12,6 +12,6 @@ defmodule GithubApprover.Services.CurrentReviewStatus do
   end
 
   defp in_progress?(issue) do
-    Github.label_exist?(issue, @app_labels["in_progress"])
+    Github.label_exist?(issue, @app_labels["in_progress"]) || issue["is_draft"]
   end
 end

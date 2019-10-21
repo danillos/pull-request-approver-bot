@@ -2,9 +2,11 @@ defmodule Github do
   use Tesla
 
   plug Tesla.Middleware.BaseUrl, "https://api.github.com"
-  plug Tesla.Middleware.Headers, %{"Authorization" => "token #{access_token()}"}
+  plug Tesla.Middleware.Headers, %{
+    "Authorization" => "token #{access_token()}",
+    "Accept"        => "application/vnd.github.v3+json,application/vnd.github.shadow-cat-preview+json"
+  }
   plug Tesla.Middleware.JSON
-
   adapter Tesla.Adapter.Hackney
 
   def issue(issue) do
@@ -38,6 +40,10 @@ defmodule Github do
 
   def reviews_for_issue(issue) do
     get("/repos/#{issue["project"]}/pulls/#{issue["id"]}/reviews").body
+  end
+
+  def pull_request(issue) do
+    get("/repos/#{issue["project"]}/pulls/#{issue["id"]}").body
   end
 
   def has_review_comments?(issue) do

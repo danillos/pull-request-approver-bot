@@ -25,6 +25,7 @@ defmodule GithubApprover.Services.UpdateReviewStatus do
   end
 
   def change_to_in_progress(issue) do
+    Github.add_label_to_issue(issue, @app_labels["in_progress"])
     Github.remove_label_from_issue(issue, @app_labels["changes_requested"])
     Github.remove_label_from_issue(issue, @app_labels["approved"])
     Github.remove_label_from_issue(issue, @app_labels["pending"])
