@@ -15,6 +15,7 @@ defmodule GithubApprover.UseCases.UpdatePullRequest do
        %{ "action" => "dismissed"              } -> GithubApprover.Services.UpdateReviewStatus.call(issue, min_required_reviews)
        %{ "action" => "review_request_removed" } -> GithubApprover.Services.UpdateReviewStatus.call(issue, min_required_reviews)
        %{ "action" => "ready_for_review"       } -> GithubApprover.Services.ReadyForReview.call(issue)
+       %{ "action" => "converted_to_draft"     } -> GithubApprover.Services.ConvertedToDraft.call(issue)
        %{ "action" => _, "review" => _         } -> GithubApprover.Services.UpdateReviewStatus.call(issue, min_required_reviews)
        _                                         -> IO.write "Event not implemented #{params["action"]}"
     end

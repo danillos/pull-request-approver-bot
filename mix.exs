@@ -25,7 +25,7 @@ defmodule GithubApprover.Mixfile do
       {:plug_cowboy, "~> 1.0"},
       {:plug, "~> 1.8"},
       {:poison, "~> 3.0"},
-      {:mock, "~> 0.2", only: :test},
+      {:mock, "~> 0.3.0", only: :test},
       {:tesla, "~> 0.10"},
       {:hackney, "~> 1.15"},
       {:timex, "~> 3.6"},
