@@ -1,5 +1,5 @@
 defmodule GithubApprover.UseCases.UpdatePullRequest do
-  
+
   def call(%{ "pull_request" => pull_request } = params) do
     trigger_delay = params["trigger_delay"] || Application.get_env(:github_approver, :trigger_delay)
     :timer.sleep(trigger_delay)
